@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Immigration {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  provinceId  Int
+  Provinces   Provinces @relation(fields: [provinceId], references: [id])
+}
+
+model ProvinceOverview {
+  id             Int              @id @default(autoincrement())
+  province_id    Int              @unique
+  banner_url     String           @default("")
+  Provinces      Provinces        @relation(fields: [province_id], references: [id])
+  ProvinceScores ProvinceScores[]
+}
+
+model ProvinceScores {
+  id               Int              @id @default(autoincrement())
+  name             String
+  score            Float
+  emoji            String
+  overview_id      Int
+  ProvinceOverview ProvinceOverview @relation(fields: [overview_id], references: [id])
+}
+
+model Provinces {
+  id                  Int               @id @default(autoincrement())
+  name                String
+  capital             String
+  slug                String
+  language            String[]
+  top_cities          String[]
+  immigration_ranking Int
+  image_url           String
+  flag_url            String
+  Immigration         Immigration[]
+  ProvinceOverview    ProvinceOverview?
+  Study               Study[]
+  cities              cities[]
+}
+
+model Study {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  provinceId  Int
+  cityId      Int
+  cities      cities    @relation(fields: [cityId], references: [id])
+  Provinces   Provinces @relation(fields: [provinceId], references: [id])
+}
+
+model cities {
+  id             Int       @id @default(autoincrement())
+  name           String
+  slug           String
+  language       String[]
+  image_url      String
+  cost_of_living Float
+  overall_score  Float
+  provinceId     Int
+  Study          Study[]
+  Provinces      Provinces @relation(fields: [provinceId], references: [id])
+}
