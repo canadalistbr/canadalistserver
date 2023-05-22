@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "devstart": "ts-node prisma/script.ts",
     "test": "jest",
     "test:staged": "jest"
   },
