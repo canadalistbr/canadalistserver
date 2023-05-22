@@ -1,6 +1,8 @@
-import { ProvinceModel } from "../../../domain/models";
-import { LoadProvinces } from "../../../domain/usecases";
-import { LoadProvincesRepository } from "../../protocols/load-provinces/load-provinces-repository";
+import {
+  LoadProvinces,
+  LoadProvincesRepository,
+  ProvinceModel,
+} from "./protocols";
 
 export class DbLoadProvinces implements LoadProvinces {
   constructor(
