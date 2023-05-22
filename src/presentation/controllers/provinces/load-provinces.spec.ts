@@ -1,5 +1,6 @@
-import { ProvinceModel } from "../../../domain/models/provinces";
-import { LoadProvinces } from "../../../domain/models/usecases/load-provinces";
+import { ProvinceModel } from "../../../domain/models";
+import { LoadProvinces } from "../../../domain/usecases";
+import { ok, serverError } from "../../helpers";
 import { LoadProvincesController } from "./load-provinces";
 
 const makeFakeProvinces = (): ProvinceModel[] => {
@@ -29,43 +30,53 @@ const makeFakeProvinces = (): ProvinceModel[] => {
   ];
 };
 
-class LoadProvincesStub implements LoadProvinces {
-  load(): Promise<ProvinceModel[]> {
-    return new Promise((resolve) => resolve(makeFakeProvinces()));
+type SutTypes = {
+  sut: LoadProvincesController;
+  loadProvincesStub: LoadProvinces;
+};
+
+const makeLoadProvinces = (): LoadProvinces => {
+  class LoadProvincesStub implements LoadProvinces {
+    async load(): Promise<ProvinceModel[]> {
+      return new Promise((promise) => promise(makeFakeProvinces()));
+    }
   }
-}
+
+  return new LoadProvincesStub();
+};
+
+const makeSut = (): SutTypes => {
+  const loadProvincesStub = makeLoadProvinces();
+  const sut = new LoadProvincesController(loadProvincesStub);
+
+  return {
+    loadProvincesStub,
+    sut,
+  };
+};
 
 describe("LoadProvincesController", () => {
-  it("", () => {
-    const loadProvincesStub = new LoadProvincesStub();
-    const sut = new LoadProvincesController(loadProvincesStub);
-    const spy = jest.spyOn(loadProvincesStub, "load");
-    const httpResponse = sut.handle({});
-    expect(spy).toHaveBeenCalled();
+  it("ensure load provinces is called", async () => {
+    const { sut, loadProvincesStub } = makeSut();
+    const loadSpy = jest.spyOn(loadProvincesStub, "load");
+    await sut.handle({});
+    expect(loadSpy).toHaveBeenCalled();
   });
 
-  it("returns 200", async () => {
-    const loadProvincesStub = new LoadProvincesStub();
-    const sut = new LoadProvincesController(loadProvincesStub);
-    const spy = jest.spyOn(loadProvincesStub, "load");
+  it("should return 200 on success", async () => {
+    const { sut } = makeSut();
     const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual({
-      statusCode: 200,
-      body: makeFakeProvinces(),
-    });
+    expect(httpResponse).toEqual(ok(makeFakeProvinces()));
   });
-  it("returns 500", async () => {
-    const loadProvincesStub = new LoadProvincesStub();
-    const sut = new LoadProvincesController(loadProvincesStub);
-    const spy = jest
+
+  it("should return 500 if LoadProvinces throw", async () => {
+    const { sut, loadProvincesStub } = makeSut();
+    jest
       .spyOn(loadProvincesStub, "load")
       .mockReturnValueOnce(
-        new Promise((resolve, reject) => reject(new Error()))
+        new Promise((resolve, reject) => reject(new Error("sd")))
       );
     const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual({
-      statusCode: 500,
-      body: new Error(),
-    });
+    expect(httpResponse).toEqual(serverError(new Error("sd")));
   });
 });

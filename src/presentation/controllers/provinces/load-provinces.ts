@@ -1,21 +1,16 @@
-import { LoadProvinces } from "../../../domain/models/usecases/load-provinces";
-import { Controller } from "../../protocols/Controller";
-import { HttpRequest, HttpResponse } from "../../protocols/http";
+import { LoadProvinces } from "../../../domain/usecases";
+import { ok, serverError } from "../../helpers";
+import { Controller, HttpRequest, HttpResponse } from "../../protocols";
 
 export class LoadProvincesController implements Controller {
-  constructor(private loadProvinces: LoadProvinces) {}
+  constructor(private readonly loadProvinces: LoadProvinces) {}
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const provinces = await this.loadProvinces.load();
-      return {
-        statusCode: 200,
-        body: provinces,
-      };
-    } catch (err) {
-      return {
-        statusCode: 500,
-        body: new Error(),
-      };
+      const data = ok(provinces);
+      return data;
+    } catch (error) {
+      return serverError(error);
     }
   }
 }
