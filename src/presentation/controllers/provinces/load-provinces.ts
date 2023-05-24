@@ -1,6 +1,11 @@
-import { LoadProvinces } from "../../../domain/usecases";
-import { ok, serverError } from "../../helpers";
-import { Controller, HttpRequest, HttpResponse } from "../../protocols";
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  LoadProvinces,
+  ok,
+  serverError,
+} from "./protocols";
 
 export class LoadProvincesController implements Controller {
   constructor(private readonly loadProvinces: LoadProvinces) {}
