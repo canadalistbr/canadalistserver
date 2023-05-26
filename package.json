@@ -8,6 +8,7 @@
     "devstart": "ts-node prisma/script.ts",
     "test": "jest",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "jest"
   },
   "repository": {
