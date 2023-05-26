@@ -27,7 +27,7 @@ type SutType = {
 }
 const makeSut = (): SutType => {
   class LoadProvinceStub implements FindProvince {
-    load(id: number): Promise<ProvinceModel> {
+    find(id: number): Promise<ProvinceModel> {
       return new Promise((resolve, reject) =>
         resolve(makeFakeProvinceFactory())
       )
@@ -67,7 +67,7 @@ describe('LoadProvinceController', () => {
   })
   it('executes LoadProvince usecase', async () => {
     const { loadProvinceStub, sut } = makeSut()
-    const load = jest.spyOn(loadProvinceStub, 'load')
+    const load = jest.spyOn(loadProvinceStub, 'find')
     await sut.handle(mockRequest)
     expect(load).toHaveBeenCalled()
   })
@@ -79,7 +79,7 @@ describe('LoadProvinceController', () => {
   it('should return 500 if LoadProvinces throw', async () => {
     const { sut, loadProvinceStub } = makeSut()
     jest
-      .spyOn(loadProvinceStub, 'load')
+      .spyOn(loadProvinceStub, 'find')
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error('error')))
       )

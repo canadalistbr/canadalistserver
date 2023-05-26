@@ -15,7 +15,7 @@ export class FindProvinceController implements Controller {
     if (!isProvince) {
       return forbidden('province not found')
     }
-    const province =  await this.loadProvince.load(provinceId)
+    const province =  await this.loadProvince.find(provinceId)
     return ok(province)
   }catch(error){
     return serverError(error)
