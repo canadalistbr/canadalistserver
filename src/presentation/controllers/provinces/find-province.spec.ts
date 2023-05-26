@@ -18,7 +18,7 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   }
 }
 const mockRequest: LoadProvinceController.Request = {
-  provinceId: 1
+  provinceId: 23
 }
 type SutType = {
   sut: FindProvinceController
@@ -34,8 +34,8 @@ const makeSut = (): SutType => {
     }
   }
   class CheckProvinceByIdStub implements CheckProvinceById {
-    check(id: number): boolean {
-      return true
+    async check(id: number): Promise<boolean> {
+      return new Promise((resolve) => resolve(true))
     }
   }
   const loadProvinceStub = new LoadProvinceStub()
@@ -58,12 +58,13 @@ describe('LoadProvinceController', () => {
     await sut.handle(mockRequest)
     expect(check).toHaveBeenCalled()
   })
-
-  it('return a 404 if province does not exist', async () => {
+  fit('return a 403 if province does not exist', async () => {
     const { checkProvinceByIdStub, sut } = makeSut()
-    jest.spyOn(checkProvinceByIdStub, 'check').mockReturnValueOnce(false)
+    jest
+      .spyOn(checkProvinceByIdStub, 'check')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(false)))
     const response = await sut.handle(mockRequest)
-    expect(response).toEqual(forbidden('province not found'))
+    expect(response).toEqual(forbidden('unauthorized'))
   })
   it('executes LoadProvince usecase', async () => {
     const { loadProvinceStub, sut } = makeSut()

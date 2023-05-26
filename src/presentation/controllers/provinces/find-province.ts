@@ -1,6 +1,12 @@
 import { CheckProvinceById } from '../../../domain/usecases/check-province-by-id'
 import { FindProvince } from '../../../domain/usecases/find-province'
-import { Controller, forbidden, HttpResponse, ok, serverError } from './protocols'
+import {
+  Controller,
+  forbidden,
+  HttpResponse,
+  ok,
+  serverError
+} from './protocols'
 
 export class FindProvinceController implements Controller {
   constructor(
@@ -8,19 +14,18 @@ export class FindProvinceController implements Controller {
     private readonly checkProvinceById: CheckProvinceById
   ) {}
   async handle(request: LoadProvinceController.Request): Promise<HttpResponse> {
-    try{
-
-    const { provinceId } = request
-    const isProvince = this.checkProvinceById.check(provinceId)
-    if (!isProvince) {
-      return forbidden('province not found')
+    try {
+      const { provinceId } = request
+      const isProvince = await this.checkProvinceById.check(provinceId)
+      if (!isProvince) {
+        return forbidden('unauthorized')
+      }
+      const province = await this.loadProvince.find(provinceId)
+      return ok(province)
+    } catch (error) {
+      return serverError(error)
     }
-    const province =  await this.loadProvince.find(provinceId)
-    return ok(province)
-  }catch(error){
-    return serverError(error)
   }
-}
 }
 
 export namespace LoadProvinceController {
