@@ -5,20 +5,10 @@ import { DbFindProvince } from "../../data/usecases/load-provinces/db-find-provi
 import { checkPrime } from "crypto";
 import { DbCheckProvinceById } from "../../data/usecases/load-provinces/db-check-province-id";
 import { FindProvincePrismaRepository } from "../../infra/db/prisma/province-repository/find-province-repository";
+import { routeAdapter } from "../adapters/express-route-adapter";
+import { makeFindProvince } from "../factories/provinces/find-province-factory";
+import { makeProvinces } from "../factories/provinces/provinces-factory";
 
 export default (route: Router) => {
-  route.get("/provinces/:provinceId", async (req, res) => {
-    const provinceId = Number(req.params.provinceId);
-    const findProvinceRepository = new FindProvincePrismaRepository();
-    const checkProvinceById = new DbCheckProvinceById(findProvinceRepository);
-    const findProvinceUsecase = new DbFindProvince(findProvinceRepository);
-    const findProvinceController = new FindProvinceController(
-      findProvinceUsecase,
-      checkProvinceById
-    );
-    const { body, statusCode } = await findProvinceController.handle({
-      provinceId,
-    });
-    return res.status(statusCode).json(body);
-  });
+  route.get("/provinces/:provinceId", routeAdapter(makeFindProvince()));
 };
