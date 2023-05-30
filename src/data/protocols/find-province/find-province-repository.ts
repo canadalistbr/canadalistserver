@@ -1,5 +1,5 @@
-import { ProvinceModel } from '../../../domain/models'
+import { ProvinceModel } from "../../../domain/models";
 
 export interface FindProvinceRepository {
-  findProvinceById(id: number): Promise<ProvinceModel>
+  findProvinceById(id: string): Promise<ProvinceModel>;
 }

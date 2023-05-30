@@ -1,5 +1,5 @@
-import { ProvinceModel } from '../models'
+import { ProvinceModel } from "../models";
 
 export interface FindProvince {
-  find(id: number): Promise<ProvinceModel>
+  find(id: string): Promise<ProvinceModel>;
 }

@@ -8,32 +8,32 @@ datasource db {
 }
 
 model Immigration {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   name        String
   description String
-  provinceId  Int
+  provinceId  String
   Provinces   Provinces @relation(fields: [provinceId], references: [id])
 }
 
 model ProvinceOverview {
-  id             Int              @id @default(autoincrement())
-  province_id    Int              @unique
+  id             String           @id @default(uuid())
+  province_id    String           @unique
   banner_url     String           @default("")
   Provinces      Provinces        @relation(fields: [province_id], references: [id])
   ProvinceScores ProvinceScores[]
 }
 
 model ProvinceScores {
-  id               Int              @id @default(autoincrement())
+  id               String           @id @default(uuid())
   name             String
   score            Float
   emoji            String
-  overview_id      Int
+  overview_id      String
   ProvinceOverview ProvinceOverview @relation(fields: [overview_id], references: [id])
 }
 
 model Provinces {
-  id                  Int               @id @default(autoincrement())
+  id                  String            @id @default(uuid())
   name                String
   capital             String
   slug                String
@@ -49,24 +49,24 @@ model Provinces {
 }
 
 model Study {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   name        String
   description String
-  provinceId  Int
-  cityId      Int
+  provinceId  String
+  cityId      String
   cities      cities    @relation(fields: [cityId], references: [id])
   Provinces   Provinces @relation(fields: [provinceId], references: [id])
 }
 
 model cities {
-  id             Int       @id @default(autoincrement())
+  id             String    @id @default(uuid())
   name           String
   slug           String
   language       String[]
   image_url      String
   cost_of_living Float
   overall_score  Float
-  provinceId     Int
+  provinceId     String
   Study          Study[]
   Provinces      Provinces @relation(fields: [provinceId], references: [id])
 }

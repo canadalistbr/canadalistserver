@@ -1,3 +1,3 @@
 export interface CheckProvinceById {
-  check(id: number): Promise<boolean>
+  check(id: string): Promise<boolean>;
 }

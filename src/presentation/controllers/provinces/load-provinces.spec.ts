@@ -6,7 +6,7 @@ import { LoadProvincesController } from "./load-provinces";
 const makeFakeProvinces = (): ProvinceModel[] => {
   return [
     {
-      id: 1,
+      id: "1",
       capital: "quebec city",
       flag_url: "randomUrl",
       image_url: "randomUrl",
@@ -17,7 +17,7 @@ const makeFakeProvinces = (): ProvinceModel[] => {
       top_cities: ["montreal"],
     },
     {
-      id: 2,
+      id: "2",
       capital: "Ottawa",
       flag_url: "randomUrl",
       image_url: "randomUrl",
