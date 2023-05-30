@@ -9,7 +9,11 @@ export class FindProvincePrismaRepository implements FindProvinceRepository {
       },
       include: {
         Immigration: true,
-        ProvinceOverview: true,
+        ProvinceOverview: {
+          include: {
+            ProvinceScores: true,
+          },
+        },
         Study: true,
         cities: true,
       },

@@ -18,6 +18,14 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
     name: "Quebec",
     slug: "Qc",
     top_cities: ["montreal"],
+    cities: [],
+    Immigration: [],
+    ProvinceOverview: {
+      banner_url: "fakeUrl",
+      id: "fakerId",
+      province_id: "1",
+      ProvinceScores: [],
+    },
   };
 };
 const mockRequest: LoadProvinceController.Request = {
@@ -61,7 +69,7 @@ describe("LoadProvinceController", () => {
     await sut.handle(mockRequest);
     expect(check).toHaveBeenCalled();
   });
-  fit("return a 403 if province does not exist", async () => {
+  it("return a 403 if province does not exist", async () => {
     const { checkProvinceByIdStub, sut } = makeSut();
     jest
       .spyOn(checkProvinceByIdStub, "check")
