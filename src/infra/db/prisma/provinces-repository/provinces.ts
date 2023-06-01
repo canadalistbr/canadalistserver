@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export class ProvincesPrismaRepository implements LoadProvincesRepository {
   async loadAll(): Promise<ProvinceModel[]> {
-    const provinces = await PrismaHelper.getCollection("provinces");
+    const provinces = await PrismaHelper.getCollection("province");
     return provinces;
   }
 }

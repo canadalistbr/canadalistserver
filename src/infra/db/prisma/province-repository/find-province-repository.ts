@@ -3,18 +3,18 @@ import { ProvinceModel } from "../../../../domain/models";
 import { prisma } from "../prisma";
 export class FindProvincePrismaRepository implements FindProvinceRepository {
   async findProvinceById(provinceId: string): Promise<ProvinceModel> {
-    return await prisma.provinces.findUnique({
+    return await prisma.province.findUnique({
       where: {
         id: provinceId,
       },
       include: {
-        Immigration: true,
-        ProvinceOverview: {
+        immigration: true,
+        overview: {
           include: {
-            ProvinceScores: true,
+            scores: true,
           },
         },
-        Study: true,
+        study: true,
         cities: true,
       },
     });

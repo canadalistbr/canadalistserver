@@ -2,17 +2,17 @@ import {
   Immigration,
   ProvinceOverview,
   Study,
-  cities,
-  Provinces,
-  ProvinceScores,
+  City,
+  Province,
+  ProvinceScore,
 } from "@prisma/client";
 
 type Overview = ProvinceOverview & {
-  ProvinceScores: ProvinceScores[];
+  ProvinceScores: ProvinceScore[];
 };
-export interface ProvinceModel extends Provinces {
-  cities?: cities[];
-  Immigration?: Immigration[];
-  ProvinceOverview?: Overview;
-  Study?: Study[];
+export interface ProvinceModel extends Province {
+  cities?: City[];
+  immigration?: Immigration[];
+  provinceOverview?: Overview;
+  study?: Study[];
 }

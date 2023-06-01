@@ -6,13 +6,13 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   return {
     id: "1",
     capital: "quebec city",
-    flag_url: "randomUrl",
-    image_url: "randomUrl",
+    flagUrl: "randomUrl",
+    imageUrl: "randomUrl",
     language: ["fr", "en"],
-    immigration_ranking: 4,
+    immigrationRanking: 4,
     name: "Quebec",
     slug: "Qc",
-    top_cities: ["montreal"],
+    topCities: ["montreal"],
   };
 };
 
