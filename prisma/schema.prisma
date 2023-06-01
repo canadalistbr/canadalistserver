@@ -8,65 +8,65 @@ datasource db {
 }
 
 model Immigration {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String
   provinceId  String
-  Provinces   Provinces @relation(fields: [provinceId], references: [id])
+  province    Province @relation(fields: [provinceId], references: [id])
 }
 
 model ProvinceOverview {
-  id             String           @id @default(uuid())
-  province_id    String           @unique
-  banner_url     String           @default("")
-  Provinces      Provinces        @relation(fields: [province_id], references: [id])
-  ProvinceScores ProvinceScores[]
+  id         String          @id @default(uuid())
+  provinceId String          @unique @map("province_id")
+  bannerUrl  String          @map("banner_url")
+  province   Province        @relation(fields: [provinceId], references: [id])
+  scores     ProvinceScore[]
 }
 
-model ProvinceScores {
-  id               String           @id @default(uuid())
-  name             String
-  score            Float
-  emoji            String
-  overview_id      String
-  ProvinceOverview ProvinceOverview @relation(fields: [overview_id], references: [id])
+model ProvinceScore {
+  id         String           @id @default(uuid())
+  name       String
+  score      Float
+  emoji      String
+  overviewId String           @map("overview_id")
+  overview   ProvinceOverview @relation(fields: [overviewId], references: [id])
 }
 
-model Provinces {
-  id                  String            @id @default(uuid())
-  name                String
-  capital             String
-  slug                String
-  language            String[]
-  top_cities          String[]
-  immigration_ranking Int
-  image_url           String
-  flag_url            String
-  Immigration         Immigration[]
-  ProvinceOverview    ProvinceOverview?
-  Study               Study[]
-  cities              cities[]
+model Province {
+  id                 String            @id @default(uuid())
+  name               String
+  capital            String
+  slug               String
+  language           String[]
+  topCities          String[]          @map("top_cities")
+  immigrationRanking Int               @map("immigration_ranking")
+  imageUrl           String            @map("image_url")
+  flagUrl            String            @map("flag_url")
+  immigration        Immigration[]
+  overview           ProvinceOverview?
+  study              Study[]
+  cities             City[]
 }
 
 model Study {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String
-  provinceId  String
-  cityId      String
-  cities      cities    @relation(fields: [cityId], references: [id])
-  Provinces   Provinces @relation(fields: [provinceId], references: [id])
+  provinceId  String   @map("province_id")
+  cityId      String   @map("city_id")
+  city        City     @relation(fields: [cityId], references: [id])
+  provinces   Province @relation(fields: [provinceId], references: [id])
 }
 
-model cities {
-  id             String    @id @default(uuid())
-  name           String
-  slug           String
-  language       String[]
-  image_url      String
-  cost_of_living Float
-  overall_score  Float
-  provinceId     String
-  Study          Study[]
-  Provinces      Provinces @relation(fields: [provinceId], references: [id])
+model City {
+  id           String   @id @default(uuid())
+  name         String
+  slug         String
+  language     String[]
+  imageUrl     String   @map("image_url")
+  costOfLiving Float    @map("cost_of_living")
+  overallScore Float    @map("overall_score")
+  provinceId   String   @map("province_id")
+  study        Study[]
+  provinces    Province @relation(fields: [provinceId], references: [id])
 }
