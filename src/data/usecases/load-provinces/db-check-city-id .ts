@@ -1,6 +1,6 @@
 import { CityModel } from "../../../domain/models/cities";
 import { CheckCityById } from "../../../domain/usecases/check-city-by-id";
-import { FindCityRepository } from "../../protocols/find-city/find-province-repository";
+import { FindCityRepository } from "../../protocols/find-city/find-city-repository";
 
 export class DbCheckCityById implements CheckCityById {
   constructor(private readonly findCity: FindCityRepository) {}
