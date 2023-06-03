@@ -7,7 +7,7 @@ import {
   serverError,
 } from "./protocols";
 
-export class LoadProvincesController implements Controller {
+export class LoadProvincesController implements Controller<HttpRequest> {
   constructor(private readonly loadProvinces: LoadProvinces) {}
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
