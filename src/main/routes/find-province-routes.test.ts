@@ -9,4 +9,8 @@ describe("province-routes", () => {
   it("returns a 200 with first letter uppercase", async () => {
     await request(app).get("/api/provinces/Quebec").expect(200);
   });
+
+  it("returns a 200 with first letter uppercase", async () => {
+    await request(app).get("/api/provinces/british-columbia").expect(200);
+  });
 });

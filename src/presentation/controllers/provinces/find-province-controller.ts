@@ -1,3 +1,4 @@
+import { SanitizeEntityName } from "../../../domain/usecases/sanitize-entity-name";
 import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
 import {
@@ -11,16 +12,18 @@ import {
 export class FindProvinceController implements Controller {
   constructor(
     private readonly loadProvince: FindProvince,
-    private readonly checkProvinceByName: CheckProvinceByName
+    private readonly checkProvinceByName: CheckProvinceByName,
+    private readonly sanitizeEntityname: SanitizeEntityName
   ) {}
   async handle(request: LoadProvinceController.Request): Promise<HttpResponse> {
     try {
       const { provinceName } = request;
-      const isProvince = await this.checkProvinceByName.check(provinceName);
+      const name = this.sanitizeEntityname.sanitize(provinceName);
+      const isProvince = await this.checkProvinceByName.check(name);
       if (!isProvince) {
         return forbidden("unauthorized");
       }
-      const province = await this.loadProvince.find(provinceName);
+      const province = await this.loadProvince.find(name);
       return ok(province);
     } catch (error) {
       return serverError(error);
