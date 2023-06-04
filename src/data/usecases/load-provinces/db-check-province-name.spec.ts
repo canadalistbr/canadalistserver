@@ -1,5 +1,5 @@
 import { FindProvinceRepository } from "../../protocols/find-province/find-province-repository";
-import { DbCheckProvinceByName } from "./db-check-province-id";
+import { DbCheckProvinceByName } from "./db-check-province-name";
 import { ProvinceModel } from "./protocols";
 const makeFakeProvinceFactory = (): ProvinceModel => {
   return {

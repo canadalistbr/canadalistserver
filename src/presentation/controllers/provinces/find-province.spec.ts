@@ -1,5 +1,5 @@
 import { ProvinceModel } from "../../../domain/models";
-import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-id";
+import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
 import {
   FindProvinceController,

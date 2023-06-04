@@ -1,4 +1,4 @@
-import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-id";
+import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvinceRepository } from "../../protocols/find-province/find-province-repository";
 import { ProvinceModel } from "./protocols";
 
