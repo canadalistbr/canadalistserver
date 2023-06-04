@@ -1,10 +1,10 @@
 import { ProvinceModel } from "../../../domain/models";
-import { CheckProvinceById } from "../../../domain/usecases/check-province-by-id";
+import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
 import {
   FindProvinceController,
   LoadProvinceController,
-} from "./find-province";
+} from "./find-province-controller";
 import { forbidden, ok, serverError } from "./protocols";
 
 const makeFakeProvinceFactory = (): ProvinceModel => {
@@ -34,7 +34,7 @@ const mockRequest: LoadProvinceController.Request = {
 type SutType = {
   sut: FindProvinceController;
   loadProvinceStub: FindProvince;
-  checkProvinceByIdStub: CheckProvinceById;
+  checkProvinceByIdStub: CheckProvinceByName;
 };
 const makeSut = (): SutType => {
   class LoadProvinceStub implements FindProvince {
@@ -44,7 +44,7 @@ const makeSut = (): SutType => {
       );
     }
   }
-  class CheckProvinceByIdStub implements CheckProvinceById {
+  class CheckProvinceByIdStub implements CheckProvinceByName {
     async check(id: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
     }

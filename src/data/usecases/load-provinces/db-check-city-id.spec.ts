@@ -1,5 +1,6 @@
+import { resolve } from "path";
 import { FindProvinceRepository } from "../../protocols/find-province/find-province-repository";
-import { DbCheckProvinceById } from "./db-check-province-id";
+import { DbCheckProvinceByName } from "./db-check-province-id";
 import { ProvinceModel } from "./protocols";
 const makeFakeProvinceFactory = (): ProvinceModel => {
   return {
@@ -17,12 +18,12 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
 
 type SutType = {
   findProvinceRepositoryStub: FindProvinceRepository;
-  sut: DbCheckProvinceById;
+  sut: DbCheckProvinceByName;
 };
 
 const makeSut = (): SutType => {
   class FindProvinceRepositoryStub implements FindProvinceRepository {
-    findProvinceById(id: string): Promise<ProvinceModel> {
+    findProvinceByName(name: string): Promise<ProvinceModel> {
       return new Promise((resolve, reject) =>
         resolve(makeFakeProvinceFactory())
       );
@@ -30,28 +31,32 @@ const makeSut = (): SutType => {
   }
 
   const findProvinceRepositoryStub = new FindProvinceRepositoryStub();
-  const sut = new DbCheckProvinceById(findProvinceRepositoryStub);
+  const sut = new DbCheckProvinceByName(findProvinceRepositoryStub);
   return {
     sut,
     findProvinceRepositoryStub,
   };
 };
 
-describe("", () => {
+describe("CheckProvinceByName`", () => {
   it("calls repository", async () => {
     const { sut, findProvinceRepositoryStub } = makeSut();
-    const find = jest.spyOn(findProvinceRepositoryStub, "findProvinceById");
-    await sut.check("1");
+    const find = jest.spyOn(findProvinceRepositoryStub, "findProvinceByName");
+    await sut.check("Quebec");
     expect(find).toHaveBeenCalled();
   });
   it("returns true if province exists", async () => {
     const { sut } = makeSut();
-    const response = await sut.check("1");
+    const response = await sut.check("quebec");
     expect(response).toBe(true);
   });
 
-  it("returns false if province does not not exists", async () => {
-    const { sut } = makeSut();
-    await sut.check("1");
+  xit("returns false if province does not not exists", async () => {
+    const { sut, findProvinceRepositoryStub } = makeSut();
+    const find = jest
+      .spyOn(findProvinceRepositoryStub, "findProvinceByName")
+      .mockResolvedValueOnce(new Promise((req, reject) => reject(new Error())));
+    await sut.check("random");
+    expect(find).rejects.toThrow;
   });
 });

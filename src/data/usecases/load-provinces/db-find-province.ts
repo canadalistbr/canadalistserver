@@ -6,9 +6,9 @@ export class DbFindProvince implements FindProvince {
   constructor(
     private readonly findProvinceRepository: FindProvinceRepository
   ) {}
-  async find(provinceId: string): Promise<ProvinceModel> {
-    const province = await this.findProvinceRepository.findProvinceById(
-      provinceId
+  async find(provinceName: string): Promise<ProvinceModel> {
+    const province = await this.findProvinceRepository.findProvinceByName(
+      provinceName
     );
     return province;
   }
@@ -16,6 +16,6 @@ export class DbFindProvince implements FindProvince {
 
 export namespace DbFindProvince {
   export type Request = {
-    provinceId: string;
+    provinceName: string;
   };
 }
