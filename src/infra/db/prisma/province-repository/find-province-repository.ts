@@ -6,7 +6,7 @@ export class FindProvincePrismaRepository implements FindProvinceRepository {
     return await prisma.province.findFirst({
       where: {
         name: {
-          equals: name.toLocaleLowerCase(),
+          equals: name,
           mode: "insensitive",
         },
       },
