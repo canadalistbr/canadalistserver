@@ -1,5 +1,5 @@
 import { FindProvinceRepository } from "../../protocols/find-province/find-province-repository";
-import { DbCheckProvinceById } from "./db-check-province-id";
+import { DbCheckProvinceByName } from "./db-check-province-id";
 import { ProvinceModel } from "./protocols";
 const makeFakeProvinceFactory = (): ProvinceModel => {
   return {
@@ -17,12 +17,12 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
 
 type SutType = {
   findProvinceRepositoryStub: FindProvinceRepository;
-  sut: DbCheckProvinceById;
+  sut: DbCheckProvinceByName;
 };
 
 const makeSut = (): SutType => {
   class FindProvinceRepositoryStub implements FindProvinceRepository {
-    findProvinceById(id: string): Promise<ProvinceModel> {
+    findProvinceByName(name: string): Promise<ProvinceModel> {
       return new Promise((resolve, reject) =>
         resolve(makeFakeProvinceFactory())
       );
@@ -30,7 +30,7 @@ const makeSut = (): SutType => {
   }
 
   const findProvinceRepositoryStub = new FindProvinceRepositoryStub();
-  const sut = new DbCheckProvinceById(findProvinceRepositoryStub);
+  const sut = new DbCheckProvinceByName(findProvinceRepositoryStub);
   return {
     sut,
     findProvinceRepositoryStub,
@@ -40,7 +40,7 @@ const makeSut = (): SutType => {
 describe("", () => {
   it("calls repository", async () => {
     const { sut, findProvinceRepositoryStub } = makeSut();
-    const find = jest.spyOn(findProvinceRepositoryStub, "findProvinceById");
+    const find = jest.spyOn(findProvinceRepositoryStub, "findProvinceByName");
     await sut.check("1");
     expect(find).toHaveBeenCalled();
   });

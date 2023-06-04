@@ -1,5 +1,5 @@
 import { ProvinceModel } from "../../../domain/models";
-import { CheckProvinceById } from "../../../domain/usecases/check-province-by-id";
+import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-id";
 import { FindProvince } from "../../../domain/usecases/find-province";
 import {
   FindProvinceController,
@@ -29,50 +29,50 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   };
 };
 const mockRequest: LoadProvinceController.Request = {
-  provinceId: "23",
+  provinceName: "Quebec",
 };
 type SutType = {
   sut: FindProvinceController;
   loadProvinceStub: FindProvince;
-  checkProvinceByIdStub: CheckProvinceById;
+  checkProvinceByNameStub: CheckProvinceByName;
 };
 const makeSut = (): SutType => {
   class LoadProvinceStub implements FindProvince {
-    find(id: string): Promise<ProvinceModel> {
+    find(name: string): Promise<ProvinceModel> {
       return new Promise((resolve, reject) =>
         resolve(makeFakeProvinceFactory())
       );
     }
   }
-  class CheckProvinceByIdStub implements CheckProvinceById {
-    async check(id: string): Promise<boolean> {
+  class CheckProvinceByNameStub implements CheckProvinceByName {
+    async check(name: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
     }
   }
   const loadProvinceStub = new LoadProvinceStub();
-  const checkProvinceByIdStub = new CheckProvinceByIdStub();
+  const checkProvinceByNameStub = new CheckProvinceByNameStub();
   const sut = new FindProvinceController(
     loadProvinceStub,
-    checkProvinceByIdStub
+    checkProvinceByNameStub
   );
   return {
     sut,
     loadProvinceStub,
-    checkProvinceByIdStub,
+    checkProvinceByNameStub,
   };
 };
 
 describe("LoadProvinceController", () => {
   it("checks if province exists", async () => {
-    const { checkProvinceByIdStub, sut } = makeSut();
-    const check = jest.spyOn(checkProvinceByIdStub, "check");
+    const { checkProvinceByNameStub, sut } = makeSut();
+    const check = jest.spyOn(checkProvinceByNameStub, "check");
     await sut.handle(mockRequest);
     expect(check).toHaveBeenCalled();
   });
   it("return a 403 if province does not exist", async () => {
-    const { checkProvinceByIdStub, sut } = makeSut();
+    const { checkProvinceByNameStub, sut } = makeSut();
     jest
-      .spyOn(checkProvinceByIdStub, "check")
+      .spyOn(checkProvinceByNameStub, "check")
       .mockReturnValueOnce(new Promise((resolve) => resolve(false)));
     const response = await sut.handle(mockRequest);
     expect(response).toEqual(forbidden("unauthorized"));

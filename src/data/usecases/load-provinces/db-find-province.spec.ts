@@ -16,7 +16,7 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   };
 };
 
-const provinceId = "1";
+const provinceName = "Quebec";
 
 type SutType = {
   sut: DbFindProvince;
@@ -24,7 +24,7 @@ type SutType = {
 };
 const makeSut = (): SutType => {
   class FindProvinceRepositoryStub implements FindProvinceRepository {
-    findProvinceById(id: string): Promise<ProvinceModel> {
+    findProvinceByName(name: string): Promise<ProvinceModel> {
       return new Promise((resolve, reject) =>
         resolve(makeFakeProvinceFactory())
       );
@@ -41,22 +41,22 @@ const makeSut = (): SutType => {
 describe("DbFindProvince", () => {
   it("calls repository", async () => {
     const { sut, findProvinceRepositoryStub } = makeSut();
-    const find = jest.spyOn(findProvinceRepositoryStub, "findProvinceById");
+    const find = jest.spyOn(findProvinceRepositoryStub, "findProvinceByName");
     await sut.find("1");
     expect(find).toHaveBeenCalled();
   });
 
   it("returns the request province", async () => {
     const { sut, findProvinceRepositoryStub } = makeSut();
-    const response = await sut.find(provinceId);
+    const response = await sut.find(provinceName);
     expect(response).toEqual(makeFakeProvinceFactory());
   });
 
   it("throws on error", async () => {
     const { sut, findProvinceRepositoryStub } = makeSut();
-    const response = await sut.find(provinceId);
+    const response = await sut.find(provinceName);
     const find = jest
-      .spyOn(findProvinceRepositoryStub, "findProvinceById")
+      .spyOn(findProvinceRepositoryStub, "findProvinceByName")
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error()))
       );
