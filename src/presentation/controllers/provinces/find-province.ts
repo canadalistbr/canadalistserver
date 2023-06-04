@@ -15,12 +15,12 @@ export class FindProvinceController implements Controller {
   ) {}
   async handle(request: LoadProvinceController.Request): Promise<HttpResponse> {
     try {
-      const { provinceId } = request;
-      const isProvince = await this.checkProvinceById.check(provinceId);
+      const { provinceName } = request;
+      const isProvince = await this.checkProvinceById.check(provinceName);
       if (!isProvince) {
         return forbidden("unauthorized");
       }
-      const province = await this.loadProvince.find(provinceId);
+      const province = await this.loadProvince.find(provinceName);
       return ok(province);
     } catch (error) {
       return serverError(error);
@@ -30,6 +30,6 @@ export class FindProvinceController implements Controller {
 
 export namespace LoadProvinceController {
   export type Request = {
-    provinceId: string;
+    provinceName: string;
   };
 }

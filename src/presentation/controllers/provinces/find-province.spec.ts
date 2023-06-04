@@ -29,7 +29,7 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   };
 };
 const mockRequest: LoadProvinceController.Request = {
-  provinceId: "23",
+  provinceName: "23",
 };
 type SutType = {
   sut: FindProvinceController;
