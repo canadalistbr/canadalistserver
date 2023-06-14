@@ -17,7 +17,7 @@ const cityId = "1";
 
 type SutType = {
   sut: DbFindCity;
-  findProvinceRepositoryStub: FindCityRepository;
+  findCityRepositoryStub: FindCityRepository;
 };
 const makeSut = (): SutType => {
   class FindCityRepositoryStub implements FindCityRepository {
@@ -26,16 +26,17 @@ const makeSut = (): SutType => {
     }
   }
 
-  const findProvinceRepositoryStub = new FindCityRepositoryStub();
-  const sut = new DbFindCity(findProvinceRepositoryStub);
+  const findCityRepositoryStub = new FindCityRepositoryStub();
+  const sut = new DbFindCity(findCityRepositoryStub);
   return {
     sut,
-    findProvinceRepositoryStub,
+    findCityRepositoryStub,
   };
 };
 describe("DbFindProvince", () => {
   it("calls repository", async () => {
-    const { sut, findProvinceRepositoryStub } = makeSut();
+    const { sut, findCityRepositoryStub: findProvinceRepositoryStub } =
+      makeSut();
     const findCity = jest.spyOn(findProvinceRepositoryStub, "findCityBy");
     await sut.find("1");
     expect(findCity).toHaveBeenCalled();
@@ -48,7 +49,8 @@ describe("DbFindProvince", () => {
   });
 
   it("throws on error", async () => {
-    const { sut, findProvinceRepositoryStub } = makeSut();
+    const { sut, findCityRepositoryStub: findProvinceRepositoryStub } =
+      makeSut();
     const response = await sut.find(cityId);
     const find = jest
       .spyOn(findProvinceRepositoryStub, "findCityBy")

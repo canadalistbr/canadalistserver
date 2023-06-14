@@ -1,4 +1,4 @@
-import { CheckCityById } from "../../../domain/usecases/check-city-by-id";
+import { CheckCityByName } from "../../../domain/usecases/check-city-by-name";
 import { FindCity } from "../../../domain/usecases/find-city";
 import { forbidden, ok, serverError } from "../../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../../protocols";
@@ -8,7 +8,7 @@ export class FindCityController
 {
   constructor(
     private readonly findCity: FindCity,
-    private readonly checkCitykById: CheckCityById
+    private readonly checkCitykById: CheckCityByName
   ) {}
   async handle(request: FindCityController.Request): Promise<HttpResponse> {
     try {

@@ -1,11 +1,11 @@
 import { CityModel } from "../../../domain/models/cities";
-import { CheckCityById } from "../../../domain/usecases/check-city-by-id";
+import { CheckCityByName } from "../../../domain/usecases/check-city-by-name";
 import { FindCityRepository } from "../../protocols/find-city/find-city-repository";
 
-export class DbCheckCityById implements CheckCityById {
+export class DbCheckCityByName implements CheckCityByName {
   constructor(private readonly findCity: FindCityRepository) {}
-  async check(id: string): Promise<boolean> {
-    const city = await this.findCity.findCityBy(id);
+  async check(name: string): Promise<boolean> {
+    const city = await this.findCity.findCityBy(name);
     if (city === null) return false;
     return true;
   }
