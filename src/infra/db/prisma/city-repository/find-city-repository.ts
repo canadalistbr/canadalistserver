@@ -3,10 +3,13 @@ import { FindCityRepository } from "../../../../data/protocols/find-city/find-ci
 import { prisma } from "../prisma";
 
 export class CityPrismaRepository implements FindCityRepository {
-  findCityBy(id: string): Promise<City> {
-    return prisma.city.findUnique({
+  findCityBy(name: string): Promise<City> {
+    return prisma.city.findFirst({
       where: {
-        id,
+        name: {
+          equals: name,
+          mode: "insensitive",
+        },
       },
     });
   }

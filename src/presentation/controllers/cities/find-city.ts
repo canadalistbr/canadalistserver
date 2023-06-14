@@ -1,5 +1,6 @@
-import { CheckCityById } from "../../../domain/usecases/check-city-by-id";
+import { CheckCityByName } from "../../../domain/usecases/check-city-by-name";
 import { FindCity } from "../../../domain/usecases/find-city";
+import { EntityNameSanitizer } from "../../../utils/sanitize-entity/sanitize-entity-name";
 import { forbidden, ok, serverError } from "../../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../../protocols";
 
@@ -8,16 +9,18 @@ export class FindCityController
 {
   constructor(
     private readonly findCity: FindCity,
-    private readonly checkCitykById: CheckCityById
+    private readonly checkCityName: CheckCityByName,
+    private readonly sanitizeCityName: EntityNameSanitizer
   ) {}
   async handle(request: FindCityController.Request): Promise<HttpResponse> {
     try {
-      const { cityId } = request;
-      const isValidId = await this.checkCitykById.check(cityId);
-      if (!isValidId) {
+      const { cityName } = request;
+      const name = this.sanitizeCityName.sanitize(cityName);
+      const isValidName = await this.checkCityName.check(name);
+      if (!isValidName) {
         return forbidden("unauthorized");
       }
-      const city = await this.findCity.find(cityId);
+      const city = await this.findCity.find(name);
       return ok(city);
     } catch (error) {
       return serverError(error);
@@ -27,6 +30,6 @@ export class FindCityController
 
 export namespace FindCityController {
   export type Request = {
-    cityId: string;
+    cityName: string;
   };
 }

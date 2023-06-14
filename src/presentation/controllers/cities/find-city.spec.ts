@@ -1,6 +1,7 @@
 import { CityModel } from "../../../domain/models/cities";
-import { CheckCityById } from "../../../domain/usecases/check-city-by-id";
+import { CheckCityByName } from "../../../domain/usecases/check-city-by-name";
 import { FindCity } from "../../../domain/usecases/find-city";
+import { EntityNameSanitizer } from "../../../utils/sanitize-entity/sanitize-entity-name";
 import { forbidden, ok, serverError } from "../../helpers";
 import { FindCityController } from "./find-city";
 
@@ -16,12 +17,13 @@ const makeFakeCity = (): CityModel => ({
 });
 
 const mockRequest: FindCityController.Request = {
-  cityId: "23",
+  cityName: "Montreal",
 };
 type SutType = {
   sut: FindCityController;
   findCityStub: FindCity;
-  checkCityByIdStub: CheckCityById;
+  checkCityByIdStub: CheckCityByName;
+  sanitizeCityName: EntityNameSanitizer;
 };
 const makeSut = (): SutType => {
   class FindCityStub implements FindCity {
@@ -29,18 +31,24 @@ const makeSut = (): SutType => {
       return new Promise((resolve, reject) => resolve(makeFakeCity()));
     }
   }
-  class CheckcityByIdStub implements CheckCityById {
+  class CheckcityByIdStub implements CheckCityByName {
     async check(id: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
     }
   }
   const findCityStub = new FindCityStub();
   const checkCityByIdStub = new CheckcityByIdStub();
-  const sut = new FindCityController(findCityStub, checkCityByIdStub);
+  const sanitizeCityName = new EntityNameSanitizer();
+  const sut = new FindCityController(
+    findCityStub,
+    checkCityByIdStub,
+    sanitizeCityName
+  );
   return {
     sut,
     findCityStub,
     checkCityByIdStub,
+    sanitizeCityName,
   };
 };
 
@@ -79,5 +87,11 @@ describe("LoadcityController", () => {
       );
     const httpResponse = await sut.handle(mockRequest);
     expect(httpResponse).toEqual(serverError(new Error("error")));
+  });
+  it("calls sanitize with province name", async () => {
+    const { sut, sanitizeCityName } = makeSut();
+    const sanitize = jest.spyOn(sanitizeCityName, "sanitize");
+    await sut.handle(mockRequest);
+    expect(sanitize).toHaveBeenCalledWith("Montreal");
   });
 });

@@ -1,5 +1,6 @@
 import { CheckProvinceById } from "../../../domain/usecases/check-province-by-id";
 import { FindProvince } from "../../../domain/usecases/find-province";
+import { SanitizeEntityName } from "../../protocols/sanitize-entity-name";
 import {
   Controller,
   forbidden,
