@@ -12,8 +12,9 @@ const makeFakeProvinces = (): ProvinceModel[] => {
       language: ["fr", "en"],
       immigrationRanking: 4,
       name: "Quebec",
-      slug: "Qc",
+      short: "Qc",
       topCities: ["montreal"],
+      entity: "province",
     },
     {
       id: "2",
@@ -23,8 +24,9 @@ const makeFakeProvinces = (): ProvinceModel[] => {
       language: ["fr", "en"],
       immigrationRanking: 2,
       name: "Ontario",
-      slug: "On",
+      short: "On",
       topCities: ["Toronto"],
+      entity: "province",
     },
   ];
 };

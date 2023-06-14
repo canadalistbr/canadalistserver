@@ -13,6 +13,7 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
     name: "Quebec",
     short: "Qc",
     topCities: ["montreal"],
+    entity: "city",
   };
 };
 

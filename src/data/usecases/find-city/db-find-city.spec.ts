@@ -11,6 +11,7 @@ const makeFakeCity = (): CityModel => ({
   overallScore: 9.9,
   provinceId: "quebecID",
   short: "MTL",
+  entity: "city",
 });
 
 const cityId = "1";
