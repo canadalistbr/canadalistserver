@@ -6,7 +6,10 @@ export class CityPrismaRepository implements FindCityRepository {
   findCityBy(name: string): Promise<City> {
     return prisma.city.findFirst({
       where: {
-        name,
+        name: {
+          equals: name,
+          mode: "insensitive",
+        },
       },
     });
   }
