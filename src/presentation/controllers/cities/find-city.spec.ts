@@ -16,7 +16,7 @@ const makeFakeCity = (): CityModel => ({
 });
 
 const mockRequest: FindCityController.Request = {
-  cityId: "23",
+  cityName: "23",
 };
 type SutType = {
   sut: FindCityController;

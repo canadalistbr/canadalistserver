@@ -12,12 +12,12 @@ export class FindCityController
   ) {}
   async handle(request: FindCityController.Request): Promise<HttpResponse> {
     try {
-      const { cityId } = request;
-      const isValidId = await this.checkCitykById.check(cityId);
+      const { cityName } = request;
+      const isValidId = await this.checkCitykById.check(cityName);
       if (!isValidId) {
         return forbidden("unauthorized");
       }
-      const city = await this.findCity.find(cityId);
+      const city = await this.findCity.find(cityName);
       return ok(city);
     } catch (error) {
       return serverError(error);
@@ -27,6 +27,6 @@ export class FindCityController
 
 export namespace FindCityController {
   export type Request = {
-    cityId: string;
+    cityName: string;
   };
 }
