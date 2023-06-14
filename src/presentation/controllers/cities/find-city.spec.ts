@@ -12,7 +12,7 @@ const makeFakeCity = (): CityModel => ({
   name: "Montreal",
   overallScore: 9.9,
   provinceId: "quebecID",
-  slug: "MTL",
+  short: "MTL",
 });
 
 const mockRequest: FindCityController.Request = {

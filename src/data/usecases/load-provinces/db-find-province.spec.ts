@@ -11,7 +11,7 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
     language: ["fr", "en"],
     immigrationRanking: 4,
     name: "Quebec",
-    slug: "Qc",
+    short: "Qc",
     topCities: ["montreal"],
   };
 };
