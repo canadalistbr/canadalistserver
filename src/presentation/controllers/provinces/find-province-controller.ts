@@ -1,6 +1,6 @@
-import { SanitizeEntityName } from "../../../domain/usecases/sanitize-entity-name";
 import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
+import { SanitizeEntityName } from "../../protocols/sanitize-entity-name";
 import {
   Controller,
   forbidden,
