@@ -34,7 +34,7 @@ model ProvinceScore {
 
 model Province {
   id                 String            @id @default(uuid())
-  name               String
+  name               String            @unique
   capital            String
   slug               String
   language           String[]
@@ -55,12 +55,12 @@ model Study {
   provinceId  String   @map("province_id")
   cityId      String   @map("city_id")
   city        City     @relation(fields: [cityId], references: [id])
-  provinces   Province @relation(fields: [provinceId], references: [id])
+  province    Province @relation(fields: [provinceId], references: [id])
 }
 
 model City {
   id           String        @id @default(uuid())
-  name         String
+  name         String        @unique
   slug         String
   language     String[]
   imageUrl     String        @map("image_url")
@@ -68,8 +68,8 @@ model City {
   overallScore Float         @map("overall_score")
   provinceId   String        @map("province_id")
   study        Study[]
-  provinces    Province      @relation(fields: [provinceId], references: [id])
-  cityOverview CityOverview?
+  province     Province      @relation(fields: [provinceId], references: [id])
+  overview     CityOverview?
 }
 
 model CityOverview {

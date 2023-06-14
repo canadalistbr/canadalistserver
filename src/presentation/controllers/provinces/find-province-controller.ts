@@ -1,5 +1,6 @@
-import { CheckProvinceById } from "../../../domain/usecases/check-province-by-id";
+import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
+import { SanitizeEntityName } from "../../protocols/sanitize-entity-name";
 import {
   Controller,
   forbidden,
@@ -11,16 +12,18 @@ import {
 export class FindProvinceController implements Controller {
   constructor(
     private readonly loadProvince: FindProvince,
-    private readonly checkProvinceById: CheckProvinceById
+    private readonly checkProvinceByName: CheckProvinceByName,
+    private readonly sanitizeEntityname: SanitizeEntityName
   ) {}
   async handle(request: LoadProvinceController.Request): Promise<HttpResponse> {
     try {
-      const { provinceId } = request;
-      const isProvince = await this.checkProvinceById.check(provinceId);
+      const { provinceName } = request;
+      const name = this.sanitizeEntityname.sanitize(provinceName);
+      const isProvince = await this.checkProvinceByName.check(name);
       if (!isProvince) {
         return forbidden("unauthorized");
       }
-      const province = await this.loadProvince.find(provinceId);
+      const province = await this.loadProvince.find(name);
       return ok(province);
     } catch (error) {
       return serverError(error);
@@ -30,6 +33,6 @@ export class FindProvinceController implements Controller {
 
 export namespace LoadProvinceController {
   export type Request = {
-    provinceId: string;
+    provinceName: string;
   };
 }

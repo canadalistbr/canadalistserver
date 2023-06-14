@@ -1,3 +1,6 @@
-import { City } from "@prisma/client";
+import { City, Province, Study } from "@prisma/client";
 
-export { City as CityModel };
+export interface CityModel extends City {
+  study?: Study[];
+  province?: Pick<Province, "short" | "name">;
+}

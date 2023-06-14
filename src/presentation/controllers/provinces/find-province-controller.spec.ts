@@ -1,10 +1,11 @@
 import { ProvinceModel } from "../../../domain/models";
-import { CheckProvinceById } from "../../../domain/usecases/check-province-by-id";
+import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
+import { SanitizeEntityName } from "../../protocols/sanitize-entity-name";
 import {
   FindProvinceController,
   LoadProvinceController,
-} from "./find-province";
+} from "./find-province-controller";
 import { forbidden, ok, serverError } from "./protocols";
 
 const makeFakeProvinceFactory = (): ProvinceModel => {
@@ -29,12 +30,13 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   };
 };
 const mockRequest: LoadProvinceController.Request = {
-  provinceId: "23",
+  provinceName: "23",
 };
 type SutType = {
   sut: FindProvinceController;
   loadProvinceStub: FindProvince;
-  checkProvinceByIdStub: CheckProvinceById;
+  checkProvinceByIdStub: CheckProvinceByName;
+  sanitizeNameStub: SanitizeEntityName;
 };
 const makeSut = (): SutType => {
   class LoadProvinceStub implements FindProvince {
@@ -44,25 +46,42 @@ const makeSut = (): SutType => {
       );
     }
   }
-  class CheckProvinceByIdStub implements CheckProvinceById {
+  class CheckProvinceByIdStub implements CheckProvinceByName {
     async check(id: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
     }
   }
+
+  class SanitizeNameStub implements SanitizeEntityName {
+    sanitize(name: string): string {
+      return "random-name";
+    }
+  }
+
   const loadProvinceStub = new LoadProvinceStub();
   const checkProvinceByIdStub = new CheckProvinceByIdStub();
+  const sanitizeNameStub = new SanitizeNameStub();
+
   const sut = new FindProvinceController(
     loadProvinceStub,
-    checkProvinceByIdStub
+    checkProvinceByIdStub,
+    sanitizeNameStub
   );
   return {
     sut,
     loadProvinceStub,
     checkProvinceByIdStub,
+    sanitizeNameStub,
   };
 };
 
 describe("LoadProvinceController", () => {
+  it("sanitizes province name", async () => {
+    const { sut, sanitizeNameStub } = makeSut();
+    const sanitize = jest.spyOn(sanitizeNameStub, "sanitize");
+    await sut.handle({ provinceName: "quebec" });
+    expect(sanitize).toHaveBeenCalled();
+  });
   it("checks if province exists", async () => {
     const { checkProvinceByIdStub, sut } = makeSut();
     const check = jest.spyOn(checkProvinceByIdStub, "check");

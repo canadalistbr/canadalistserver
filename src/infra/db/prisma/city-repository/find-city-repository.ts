@@ -8,6 +8,20 @@ export class CityPrismaRepository implements FindCityRepository {
       where: {
         id,
       },
+      include: {
+        overview: {
+          include: {
+            scores: true,
+          },
+        },
+        study: true,
+        province: {
+          select: {
+            short: true,
+            name: true,
+          },
+        },
+      },
     });
   }
 }
