@@ -13,7 +13,7 @@ const makeFakeCities = (): CityModel[] => {
       name: "Montreal",
       overallScore: 9.9,
       provinceId: "quebecID",
-      slug: "MTL",
+      short: "MTL",
     },
     {
       id: "2",
@@ -23,7 +23,7 @@ const makeFakeCities = (): CityModel[] => {
       name: "Vancouver",
       overallScore: 9.9,
       provinceId: "quebecID",
-      slug: "Van",
+      short: "Van",
     },
   ];
 };
