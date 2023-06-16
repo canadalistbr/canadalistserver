@@ -1,6 +1,7 @@
 import { ProvinceModel } from "../../../domain/models";
 import { LoadProvinces } from "../../../domain/usecases";
 import { ok, serverError } from "../../helpers";
+import { ModelWithSlug, SlugInsertion } from "../../protocols/slug-insertion";
 import { LoadProvincesController } from "./load-provinces";
 
 const makeFakeProvinces = (): ProvinceModel[] => {
@@ -35,6 +36,7 @@ const makeFakeProvinces = (): ProvinceModel[] => {
 type SutTypes = {
   sut: LoadProvincesController;
   loadProvincesStub: LoadProvinces;
+  addSlug: SlugInsertion<ProvinceModel>;
 };
 
 const makeLoadProvinces = (): LoadProvinces => {
@@ -43,17 +45,31 @@ const makeLoadProvinces = (): LoadProvinces => {
       return new Promise((promise) => promise(makeFakeProvinces()));
     }
   }
-
   return new LoadProvincesStub();
+};
+
+const makeAddSlug = (): SlugInsertion<ProvinceModel> => {
+  class SlugInsertionStub implements SlugInsertion<ProvinceModel> {
+    add(model: ProvinceModel): ModelWithSlug<ProvinceModel> {
+      return {
+        ...model,
+        slug: "slug",
+      };
+    }
+  }
+
+  return new SlugInsertionStub();
 };
 
 const makeSut = (): SutTypes => {
   const loadProvincesStub = makeLoadProvinces();
-  const sut = new LoadProvincesController(loadProvincesStub);
+  const addSlug = makeAddSlug();
+  const sut = new LoadProvincesController(loadProvincesStub, addSlug);
 
   return {
     loadProvincesStub,
     sut,
+    addSlug,
   };
 };
 
@@ -68,7 +84,9 @@ describe("LoadProvincesController", () => {
   it("should return 200 on success", async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual(ok(makeFakeProvinces()));
+    expect(httpResponse).toEqual(
+      ok(makeFakeProvinces().map((province) => ({ ...province, slug: "slug" })))
+    );
   });
 
   it("should return 500 if LoadProvinces throw", async () => {
@@ -80,5 +98,11 @@ describe("LoadProvincesController", () => {
       );
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(serverError(new Error("sd")));
+  });
+  it("calls with model", async () => {
+    const { sut, addSlug } = makeSut();
+    const add = jest.spyOn(addSlug, "add");
+    await sut.handle({});
+    expect(add).toHaveBeenCalled();
   });
 });
