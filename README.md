@@ -10,6 +10,7 @@ http://localhost:5050/api/cities/city-name
 http://localhost:5050/api/provinces
 http://localhost:5050/api/provinces/:province-name
 http://localhost:5050/api/entities/:entity  (Entity can be either city or province)
+
 You have two ways to run this project:
 
 First, you need to create a .env file based on the .env.exemple file.
