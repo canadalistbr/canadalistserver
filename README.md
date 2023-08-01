@@ -13,11 +13,10 @@ http://localhost:5050/api/entities/:entity  (Entity can be either city or provin
 
 You have two ways to run this project:
 
-First, you need to create a .env file based on the .env.exemple file.
+First, you need to create a .env file
 
 Make sure to fill all the variables especially NODE_ENV with development or production, this will determine the following command.
 
-# or
 make app-production
 You can check the Makefile to see all the options or run make help to see all the commands.
 
