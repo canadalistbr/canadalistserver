@@ -28,8 +28,9 @@ Install dependencies:
 ```
 yarn
 ```
-```
+
 Run the migrations:
+```
 yarn prisma migrate dev
 ```
 
