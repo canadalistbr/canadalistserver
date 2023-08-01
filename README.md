@@ -7,8 +7,11 @@ There are 5 routes so far
 
 http://localhost:5050/api/cities
 http://localhost:5050/api/cities/city-name
+
 http://localhost:5050/api/provinces
+
 http://localhost:5050/api/provinces/:province-name
+
 http://localhost:5050/api/entities/:entity  (Entity can be either city or province)
 
 You have two ways to run this project:
@@ -27,7 +30,7 @@ Install dependencies:
 
 yarn
 Run the migrations:
-yarn prisma migrate
+yarn prisma migrate dev
 
 Run the seeds:
 
