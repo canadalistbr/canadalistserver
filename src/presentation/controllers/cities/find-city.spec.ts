@@ -1,5 +1,5 @@
 import { CityModel } from "../../../domain/models/cities";
-import { CheckCityById } from "../../../domain/usecases/check-city-by-id";
+import { CheckCityByName } from "../../../domain/usecases/check-city-by-name";
 import { FindCity } from "../../../domain/usecases/find-city";
 import { forbidden, ok, serverError } from "../../helpers";
 import { FindCityController } from "./find-city";
@@ -17,12 +17,12 @@ const makeFakeCity = (): CityModel => ({
 });
 
 const mockRequest: FindCityController.Request = {
-  cityId: "23",
+  cityName: "23",
 };
 type SutType = {
   sut: FindCityController;
   findCityStub: FindCity;
-  checkCityByIdStub: CheckCityById;
+  checkCityByIdStub: CheckCityByName;
 };
 const makeSut = (): SutType => {
   class FindCityStub implements FindCity {
@@ -30,7 +30,7 @@ const makeSut = (): SutType => {
       return new Promise((resolve, reject) => resolve(makeFakeCity()));
     }
   }
-  class CheckcityByIdStub implements CheckCityById {
+  class CheckcityByIdStub implements CheckCityByName {
     async check(id: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
     }
