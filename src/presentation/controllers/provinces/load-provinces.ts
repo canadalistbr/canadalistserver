@@ -20,7 +20,7 @@ export class LoadProvincesController implements Controller<HttpRequest> {
       const provincesWithSlug = provinces.map((province) =>
         this.addSlug.add(province)
       );
-      const data = ok(provincesWithSlug);
+      const data = ok(provincesWithSlug)
       return data;
     } catch (error) {
       return serverError(error);
