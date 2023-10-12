@@ -10,5 +10,5 @@ import { makeFindProvince } from "../factories/provinces/find-province-factory";
 import { makeProvinces } from "../factories/provinces/provinces-factory";
 
 export default (route: Router) => {
-  route.get("/provinces/:provinceId", routeAdapter(makeFindProvince()));
+  route.get("/provinces/:provinceName", routeAdapter(makeFindProvince()));
 };
