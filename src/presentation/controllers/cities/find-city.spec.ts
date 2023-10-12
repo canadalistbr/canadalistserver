@@ -1,6 +1,8 @@
 import { CityModel } from "../../../domain/models/cities";
 import { CheckCityByName } from "../../../domain/usecases/check-city-by-name";
 import { FindCity } from "../../../domain/usecases/find-city";
+import { SlugInsertionUtil } from "../../../utils/add-slug/add-slug";
+import { EntityNameSanitization } from "../../../utils/add-slug/sanitize-entity-name";
 import { forbidden, ok, serverError } from "../../helpers";
 import { FindCityController } from "./find-city";
 
@@ -37,7 +39,9 @@ const makeSut = (): SutType => {
   }
   const findCityStub = new FindCityStub();
   const checkCityByIdStub = new CheckcityByIdStub();
-  const sut = new FindCityController(findCityStub, checkCityByIdStub);
+  const nameSanitization = new EntityNameSanitization()
+  const slug = new SlugInsertionUtil<CityModel>()
+  const sut = new FindCityController(findCityStub, checkCityByIdStub,nameSanitization,slug);
   return {
     sut,
     findCityStub,
@@ -69,7 +73,7 @@ describe("LoadcityController", () => {
   it("returns a 200 on success", async () => {
     const { sut } = makeSut();
     const response = await sut.handle(mockRequest);
-    expect(response).toEqual(ok(makeFakeCity()));
+    expect(response).toEqual(ok({...makeFakeCity(), slug:'montreal'}));
   });
   it("should return 500 if Loadcitys throw", async () => {
     const { sut, findCityStub } = makeSut();

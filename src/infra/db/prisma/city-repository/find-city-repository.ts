@@ -3,8 +3,8 @@ import { FindCityRepository } from "../../../../data/protocols/find-city/find-ci
 import { prisma } from "../prisma";
 
 export class CityPrismaRepository implements FindCityRepository {
-  findCityBy(cityName: string): Promise<City> {
-    return prisma.city.findFirst({
+  async findCityBy(cityName: string): Promise<City> {
+   return await prisma.city.findFirst({
       where: {
         name: {
           equals: cityName,

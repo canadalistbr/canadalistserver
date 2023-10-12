@@ -1,6 +1,8 @@
 import { ProvinceModel } from "../../../domain/models";
 import { CheckProvinceByName } from "../../../domain/usecases/check-province-by-name";
 import { FindProvince } from "../../../domain/usecases/find-province";
+import { SlugInsertionUtil } from "../../../utils/add-slug/add-slug";
+import { EntityNameSanitization } from "../../../utils/add-slug/sanitize-entity-name";
 import {
   FindProvinceController,
   LoadProvinceController,
@@ -30,7 +32,7 @@ const makeFakeProvinceFactory = (): ProvinceModel => {
   };
 };
 const mockRequest: LoadProvinceController.Request = {
-  provinceId: "23",
+  provinceName: "23",
 };
 type SutType = {
   sut: FindProvinceController;
@@ -52,9 +54,13 @@ const makeSut = (): SutType => {
   }
   const loadProvinceStub = new LoadProvinceStub();
   const checkProvinceByIdStub = new CheckProvinceByIdStub();
+  const addSlug = new SlugInsertionUtil<ProvinceModel>()
+  const nameSanitization = new EntityNameSanitization()
   const sut = new FindProvinceController(
     loadProvinceStub,
-    checkProvinceByIdStub
+    checkProvinceByIdStub,
+    addSlug,
+    nameSanitization
   );
   return {
     sut,
@@ -87,7 +93,7 @@ describe("LoadProvinceController", () => {
   it("returns a 200 on success", async () => {
     const { sut } = makeSut();
     const response = await sut.handle(mockRequest);
-    expect(response).toEqual(ok(makeFakeProvinceFactory()));
+    expect(response).toEqual(ok({...makeFakeProvinceFactory(), slug:'quebec'}));
   });
   it("should return 500 if LoadProvinces throw", async () => {
     const { sut, loadProvinceStub } = makeSut();
