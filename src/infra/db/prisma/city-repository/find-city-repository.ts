@@ -4,13 +4,21 @@ import { prisma } from "../prisma";
 
 export class CityPrismaRepository implements FindCityRepository {
   async findCityBy(cityName: string): Promise<City> {
-   return await prisma.city.findFirst({
+    return await prisma.city.findFirst({
       where: {
         name: {
           equals: cityName,
           mode: 'insensitive'
         }
       },
+      include: {
+        cityOverview: {
+          include: {
+            scores: true
+          }
+        },
+        provinces: true
+      }
     });
   }
 }
