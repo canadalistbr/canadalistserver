@@ -9,8 +9,8 @@ describe("/api/cities", () => {
   });
 
   it("returns a 200", async () => {
-      await request(app)
-      .get("/api/cities/fort-mcmurray")
+    await request(app)
+      .get("/api/cities/Quebec-ciTy")
       .expect(200);
   });
 
