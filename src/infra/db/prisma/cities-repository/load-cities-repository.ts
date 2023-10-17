@@ -3,8 +3,19 @@ import { LoadCitiesRepository } from "../../../../data/protocols/load-cities/loa
 import { prisma } from "../prisma";
 
 export class CitiesPrismaRepository implements LoadCitiesRepository {
-  loadAll(): Promise<City[]> {
+  loadAll(filters?: any): Promise<City[]> {
+    const isBikeFriendly = Boolean(filters?.bikeFriendly)
+    const hasNature = Boolean(filters?.nature)
+    const hasFestivals = Boolean(filters?.festivals)
     const cities = prisma.city.findMany({
+      where: {
+        bikeFriendly: isBikeFriendly || {
+        },
+        nature: hasNature || {},
+        festivals: hasFestivals ? {
+          not: ''
+        } : {}
+      },
       include: {
         provinces: true
       }

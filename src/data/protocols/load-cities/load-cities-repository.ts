@@ -1,5 +1,5 @@
 import { CityModel } from "../../../domain/models/cities";
 
 export interface LoadCitiesRepository {
-  loadAll(): Promise<CityModel[]>;
+  loadAll(filters?: any): Promise<CityModel[]>;
 }
