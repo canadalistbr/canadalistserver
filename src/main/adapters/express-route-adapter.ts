@@ -6,6 +6,7 @@ export function routeAdapter(controller: Controller) {
     const request = {
       ...req.body,
       ...req.params,
+      ...req.query
     };
     const { statusCode, body } = await controller.handle(request);
     return res.status(statusCode).json(body);
