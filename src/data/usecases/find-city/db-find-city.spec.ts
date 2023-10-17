@@ -4,7 +4,7 @@ import { DbFindCity } from "./db-find-city";
 
 const makeFakeCity = (): CityModel => ({
   id: "1",
-  costOfLiving: 3,
+  costOfLiving: "3",
   imageUrl: "path",
   language: ["En, Fr"],
   name: "Montreal",
@@ -12,6 +12,13 @@ const makeFakeCity = (): CityModel => ({
   provinceId: "quebecID",
   short: "MTL",
   entity: "city",
+  winter: 'Cold',
+  bikeFriendly: true,
+  festivals: 'jazz',
+  immigrationDestinationRank: 1,
+  industries: ['tech'],
+  nature: true,
+  population: 10000
 });
 
 const cityId = "1";

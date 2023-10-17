@@ -8,14 +8,21 @@ import { FindCityController } from "./find-city";
 
 const makeFakeCity = (): CityModel => ({
   id: "1",
-  costOfLiving: 3,
+  costOfLiving: "3",
   imageUrl: "path",
   language: ["En, Fr"],
   name: "Montreal",
   overallScore: 9.9,
   provinceId: "quebecID",
   short: "MTL",
-  entity: "province",
+  entity: "city",
+  winter: 'Cold',
+  bikeFriendly: true,
+  festivals: 'jazz',
+  immigrationDestinationRank: 1,
+  industries: ['tech'],
+  nature: true,
+  population: 10000
 });
 
 const mockRequest: FindCityController.Request = {
@@ -41,7 +48,7 @@ const makeSut = (): SutType => {
   const checkCityByIdStub = new CheckcityByIdStub();
   const nameSanitization = new EntityNameSanitization()
   const slug = new SlugInsertionUtil<CityModel>()
-  const sut = new FindCityController(findCityStub, checkCityByIdStub,nameSanitization,slug);
+  const sut = new FindCityController(findCityStub, checkCityByIdStub, nameSanitization, slug);
   return {
     sut,
     findCityStub,
@@ -73,7 +80,7 @@ describe("LoadcityController", () => {
   it("returns a 200 on success", async () => {
     const { sut } = makeSut();
     const response = await sut.handle(mockRequest);
-    expect(response).toEqual(ok({...makeFakeCity(), slug:'montreal'}));
+    expect(response).toEqual(ok({ ...makeFakeCity(), slug: 'montreal' }));
   });
   it("should return 500 if Loadcitys throw", async () => {
     const { sut, findCityStub } = makeSut();
