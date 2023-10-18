@@ -7,15 +7,18 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
     const isBikeFriendly = Boolean(filters?.bikeFriendly)
     const hasNature = Boolean(filters?.nature)
     const hasFestivals = Boolean(filters?.festivals)
+    const hasWinter = Boolean(filters?.winter)
+
     const cities = prisma.city.findMany({
       where: {
-        bikeFriendly: isBikeFriendly || {
-        },
+        bikeFriendly: isBikeFriendly || {},
         nature: hasNature || {},
         festivals: hasFestivals ? {
           not: ''
-        } : {}
+        } : {},
+        winter: hasWinter ? filters?.winter : {}
       },
+
       include: {
         provinces: true
       }

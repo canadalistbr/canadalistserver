@@ -26,5 +26,6 @@ export namespace LoadCitiesController {
     bikeFriendly?: string
     nature?: string
     festivals?: string
+    winter?: "Mild" | "Cold" | "Freezing"
   }
 }
