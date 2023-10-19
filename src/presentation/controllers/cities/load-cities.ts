@@ -27,5 +27,6 @@ export namespace LoadCitiesController {
     nature?: string
     festivals?: string
     winter?: "Mild" | "Cold" | "Freezing"
+    size?: "Small" | "Medium" | "Big"
   }
 }
