@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "nodemon src/main/server.ts",
     "devstart": "ts-node prisma/script.ts",
     "test": "jest",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
