@@ -27,7 +27,7 @@ export function getCityPopulation(size: 'Small' | 'Medium' | 'Big') {
   }
 }
 
-
+//TODO: Refactor entire repository after filters are done
 export class CitiesPrismaRepository implements LoadCitiesRepository {
   loadAll(filters?: any): Promise<City[]> {
     const isBikeFriendly = Boolean(filters?.bikeFriendly)
@@ -36,6 +36,35 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
     const hasWinter = Boolean(filters?.winter)
     const hasSize = Boolean(filters?.size)
     const hasProvince = Boolean(filters?.province)
+    const hasFrench = Boolean(filters?.fr)
+    const hasEnglish = Boolean(filters?.en)
+
+    let language: any
+
+    if (hasEnglish && hasFrench) {
+      language = {
+        equals: [
+          "En", "Fr"
+        ]
+      }
+    } else if (hasEnglish && !hasFrench) {
+      language = {
+        equals: [
+          "En"
+        ]
+      }
+    } else if (!hasEnglish && hasFrench) {
+      language = {
+        equals: [
+          "Fr"
+        ]
+      }
+    } else {
+      language = {
+        has: "En" || "Fr"
+      }
+    }
+
 
     const cities = prisma.city.findMany({
       where: {
@@ -48,7 +77,8 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
         population: hasSize ? getCityPopulation(filters?.size) : {},
         provinces: hasProvince ? {
           name: capitalizeFirstLetter(filters?.province)
-        } : {}
+        } : {},
+        language
       },
       include: {
         provinces: true

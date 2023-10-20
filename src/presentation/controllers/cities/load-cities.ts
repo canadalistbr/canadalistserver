@@ -29,5 +29,7 @@ export namespace LoadCitiesController {
     winter?: "Mild" | "Cold" | "Freezing"
     size?: "Small" | "Medium" | "Big"
     province?: string
+    en?: string
+    fr?: string
   }
 }
