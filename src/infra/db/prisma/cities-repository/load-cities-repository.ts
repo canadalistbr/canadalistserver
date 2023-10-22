@@ -3,6 +3,9 @@ import { LoadCitiesRepository } from "../../../../data/protocols/load-cities/loa
 import { prisma } from "../prisma";
 
 function capitalizeString(str: string) {
+  if (str === "and") {
+    return str
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -29,7 +32,7 @@ export function getCityPopulation(size: 'Small' | 'Medium' | 'Big') {
 
 //TODO: Refactor entire repository after filters are done
 export class CitiesPrismaRepository implements LoadCitiesRepository {
-  loadAll(filters?: any): Promise<City[]> {
+  async loadAll(filters?: any): Promise<City[]> {
     const isBikeFriendly = Boolean(filters?.bikeFriendly)
     const hasNature = Boolean(filters?.nature)
     const hasFestivals = Boolean(filters?.festivals)
@@ -39,32 +42,17 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
     const hasFrench = Boolean(filters?.fr)
     const hasEnglish = Boolean(filters?.en)
 
-    let language: any
+    let language: { equals?: string[], hasSome?: string[] } = {};
 
     if (hasEnglish && hasFrench) {
-      language = {
-        equals: [
-          "En", "Fr"
-        ]
-      }
+      language.equals = ["En", "Fr"];
     } else if (hasEnglish && !hasFrench) {
-      language = {
-        equals: [
-          "En"
-        ]
-      }
+      language.equals = ["En"];
     } else if (!hasEnglish && hasFrench) {
-      language = {
-        equals: [
-          "Fr"
-        ]
-      }
+      language.equals = ["Fr"];
     } else {
-      language = {
-        has: "En" || "Fr"
-      }
+      language.hasSome = ["En", "Fr"];
     }
-
 
     const cities = prisma.city.findMany({
       where: {
@@ -75,10 +63,10 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
         } : {},
         winter: hasWinter ? filters?.winter : {},
         population: hasSize ? getCityPopulation(filters?.size) : {},
+        language,
         provinces: hasProvince ? {
           name: capitalizeFirstLetter(filters?.province)
         } : {},
-        language
       },
       include: {
         provinces: true
