@@ -79,6 +79,13 @@ model City {
   provinces                  Province      @relation(fields: [provinceId], references: [id])
   cityOverview               CityOverview?
   study                      Study[]
+  costOverall                CostOverall   @default(High)
+}
+
+enum CostOverall {
+  High
+  Low
+  Medium
 }
 
 model CityOverview {
