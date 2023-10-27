@@ -41,6 +41,7 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
     const hasProvince = Boolean(filters?.province)
     const hasFrench = Boolean(filters?.fr)
     const hasEnglish = Boolean(filters?.en)
+    const hasCostOverall = Boolean(filters?.costOverall)
 
     let language: { equals?: string[], hasSome?: string[] } = {};
 
@@ -67,6 +68,7 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
         provinces: hasProvince ? {
           name: capitalizeFirstLetter(filters?.province)
         } : {},
+        costOverall: hasCostOverall ? filters?.costOverall : {}
       },
       include: {
         provinces: true

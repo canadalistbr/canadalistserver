@@ -31,5 +31,6 @@ export namespace LoadCitiesController {
     province?: string
     en?: string
     fr?: string
+    costOverall?: "Low" | "Medium" | "High"
   }
 }
