@@ -48,9 +48,9 @@ export class CitiesPrismaRepository implements LoadCitiesRepository {
     if (hasEnglish && hasFrench) {
       language.equals = ["En", "Fr"];
     } else if (hasEnglish && !hasFrench) {
-      language.equals = ["En"];
+      language.hasSome = ["En"];
     } else if (!hasEnglish && hasFrench) {
-      language.equals = ["Fr"];
+      language.hasSome = ["Fr"];
     } else {
       language.hasSome = ["En", "Fr"];
     }
