@@ -104,6 +104,7 @@ model CityScore {
   score      Float?
   emoji      String
   overview   CityOverview @relation(fields: [overviewId], references: [id])
+  position   Int          @default(0)
 }
 
 enum Winter {
